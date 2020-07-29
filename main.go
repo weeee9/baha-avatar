@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"strconv"
 	"strings"
 	"time"
@@ -31,7 +32,12 @@ func main() {
 
 	router.GET("/avatar", renderAvatar)
 
-	router.Run(":8080")
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "80"
+	}
+
+	router.Run(":" + port)
 }
 
 func renderAvatar(c *gin.Context) {
