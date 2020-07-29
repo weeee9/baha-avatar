@@ -22,14 +22,8 @@ var (
 
 const (
 	postURL = `https://forum.gamer.com.tw/C.php?page=81000&bsn=60076&snA=5037743`
+	kirito  = `https://imgur.com/6hBAhdf`
 )
-
-func init() {
-	kirito404, err = ioutil.ReadFile("./img/kirito.jpeg")
-	if err != nil {
-		log.Fatal(err)
-	}
-}
 
 func main() {
 	router := gin.Default()
@@ -53,8 +47,7 @@ func renderAvatar(c *gin.Context) {
 		resp, err := http.Get(postURL)
 		if err != nil {
 			log.Println(err)
-			c.Header("Content-Length", strconv.Itoa(len(kirito404)))
-			c.Data(http.StatusBadRequest, "image/png", kirito404)
+			c.Redirect(http.StatusTemporaryRedirect, kirito)
 			return
 		}
 		defer resp.Body.Close()
@@ -62,8 +55,7 @@ func renderAvatar(c *gin.Context) {
 		dom, err := goquery.NewDocumentFromReader(resp.Body)
 		if err != nil {
 			log.Println(err)
-			c.Header("Content-Length", strconv.Itoa(len(kirito404)))
-			c.Data(http.StatusBadRequest, "image/png", kirito404)
+			c.Redirect(http.StatusTemporaryRedirect, kirito)
 			return
 		}
 		userIDs := dom.Find(".userid")
@@ -74,8 +66,7 @@ func renderAvatar(c *gin.Context) {
 		avatarBytes, err = downloadAvatar(avatarURL)
 		if err != nil {
 			log.Println(err)
-			c.Header("Content-Length", strconv.Itoa(len(kirito404)))
-			c.Data(http.StatusBadRequest, "image/png", kirito404)
+			c.Redirect(http.StatusTemporaryRedirect, kirito)
 			return
 		}
 		size := len(avatarBytes)
