@@ -30,7 +30,7 @@ func main() {
 	router := gin.Default()
 	router.Static("/img", "./img")
 
-	router.GET("/avatar", renderAvatar)
+	router.GET("/avatar.png", renderAvatar)
 
 	port := os.Getenv("PORT")
 	if port == "" {
